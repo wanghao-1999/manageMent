@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>编辑用户</title>
+    <!-- 添加所需的样式 -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column; /* 垂直布局 */
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            min-height: 100vh; /* 设置最小高度以填充整个视口 */
+            margin: 0;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 300px; /* 控制表单宽度 */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="submit"],
+        .button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px; /* 设置按钮字体大小 */
+        }
+
+        .button {
+            margin-top: 10px;
+            margin-left: 10px; /* 添加左边距以与保存按钮有一定间隔 */
+        }
+
+        .button-container {
+            display: flex;
+            align-items: center; /* 垂直居中按钮 */
+        }
+
+        .button-group {
+            display: flex;
+            align-items: flex-start; /* 垂直对齐 */
+        }
+    </style>
+</head>
+<body>
+    <div class="center-container">
+        <h1>编辑用户</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="button-container">
+                <div class="button-group">
+                    <input type="submit" value="保存" class="button">
+                    <a href="{% url 'home' %}" class="button">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

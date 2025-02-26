@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>编辑文档</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        h1 {
+            margin: 20px 0;
+            text-align: center;
+        }
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        input[type="text"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        input[type="text"]:read-only {
+            background-color: #f2f2f2;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center; /* 按钮右对齐 */
+            margin-top: 20px;
+        }
+        .button-container button, .button-container a.button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px; /* 设置按钮字体大小 */
+            margin-left: 10px;
+        }
+        .button-container button:hover, .button-container a.button:hover {
+            background-color: #0056b3;
+        }
+        .form-row {
+            display: flex;
+            align-items: center;
+        }
+        .form-row label {
+            flex: 0 0 240px; /* 固定标签宽度 */
+        }
+        .form-row select {
+            flex: 1; /* 剩余宽度占满 */
+            margin-left: 0px;
+        }
+    </style>
+</head>
+<body>
+    <h1>编辑文档</h1>
+    <form method="post">
+        {% csrf_token %}
+        <!-- 文件名称（不可编辑） -->
+        <label for="document_name">文件名称:</label>
+        <input type="text" name="document_name" id="document_name" value="{{ document.document_name }}" readonly style="width: 476px;">
+
+        <br>
+        <!-- 文档分类 -->
+        <div class="form-row">
+            <label for="contract_category">文档分类:</label>
+            <select name="contract_category" id="contract_category">
+                <option value="paper" {% if document.contract_category == "paper" %}selected{% endif %}>纸质文档</option>
+                <option value="electronic" {% if document.contract_category == "electronic" %}selected{% endif %}>电子文档</option>
+            </select>
+        </div>
+        <!-- 文档签字日期 -->
+        <div class="form-row">
+            <label for="contract_signature_date">文档签订日期:</label>
+            <input type="date" name="contract_signature_date" id="contract_signature_date" value="{{ document.contract_signature_date }}">
+        </div>
+        <!-- 文档失效日期 -->
+        <div class="form-row">
+            <label for="contract_expiry_date">文档失效日期:</label>
+            <input type="date" name="contract_expiry_date" id="contract_expiry_date" value="{{ document.contract_expiry_date }}">
+        </div>
+        <!-- 文档金额（含税） -->
+        <div class="form-row">
+            <label for="contract_amount_with_tax">文档金额（含税）:</label>
+            <input type="text" name="contract_amount_with_tax" id="contract_amount_with_tax" value="{{ document.contract_amount_with_tax }}">
+        </div>
+        <!-- 文档金额（未税） -->
+        <div class="form-row">
+            <label for="contract_amount_without_tax">文档金额（未税）:</label>
+            <input type="text" name="contract_amount_without_tax" id="contract_amount_without_tax" value="{{ document.contract_amount_without_tax }}">
+        </div>
+        <!-- 付款条件 -->
+        <div class="form-row">
+            <label for="payment_terms">对应系统:</label>
+            <select name="payment_terms" id="payment_terms">
+                <option value="" selected>选择对应系统</option>
+                {% for payment_term in existing_payment_terms %}
+                    <option value="{{ payment_term.id }}"
+                            {% if document.payment_terms == payment_term %} selected{% endif %}>
+                        {{ payment_term.abbreviation }} - {{ payment_term.description }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="button-container">
+            <button type="submit">保存</button>
+            <a href="{% url 'home' %}" class="button">返回</a>
+        </div>
+    </form>
+</body>
+</html>

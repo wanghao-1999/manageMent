@@ -1,0 +1,1 @@
+asgiref==3.7.2Django==4.2.4sqlparse==0.4.4typing_extensions==4.7.1tzdata==2023.3

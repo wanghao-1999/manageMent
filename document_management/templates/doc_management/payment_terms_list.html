@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>对应系统列表</title>
+    <style>
+        /* 添加适当的样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        main {
+            margin: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            width: 33%; /* 平均分成三列 */
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #333;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f2f2f2;
+        }
+        .centered {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #ccc;
+            color: #333;
+            margin-left: 10px;
+        }
+        .btn-secondary:hover {
+            background-color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>对应系统列表</h1>
+    </header>
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>简称</th>
+                    <th>详细描述</th>
+                    <th class="operations">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for payment_term in payment_terms %}
+                <tr>
+                    <td>{{ payment_term.abbreviation }}</td>
+                    <td>{{ payment_term.description }}</td>
+                    <td class="operations">
+                        <a href="{% url 'edit_payment_term' payment_term.id %}" class="btn">编辑</a>
+                        <a href="{% url 'delete_payment_term' payment_term.id %}" class="btn btn-secondary">删除</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="centered">
+            <a href="{% url 'add_payment_term' %}" class="btn">添加新对应系统</a>
+            <a href="{% url 'home' %}" class="btn btn-secondary">返回首页</a>
+        </div>
+    </main>
+</body>
+</html>

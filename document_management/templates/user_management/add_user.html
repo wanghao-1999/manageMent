@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>新增用户</title>
+    <!-- 添加所需的样式 -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
+            min-height: 100vh; /* 设置最小高度以填充整个视口 */
+            margin: 0;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            width: 300px; /* 控制表单宽度 */
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column; /* 垂直排列表单元素 */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: flex-start; /* 使按钮靠右对齐 */
+            align-items: center; /* 垂直居中按钮 */
+            margin-top: 10px; /* 添加顶部间距 */
+        }
+
+        .button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px; /* 设置按钮字体大小 */
+            margin-left: 10px; /* 添加左边距 */
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="center-container">
+        <h1>新增用户</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="button-container">
+                <button type="submit" class="button">保存</button>
+                <a href="{% url 'user_list' %}" class="button">返回</a>
+
+            </div>
+        </form>
+    </div>
+</body>
+</html>

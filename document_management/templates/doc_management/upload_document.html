@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>上传文档</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        main {
+            padding: 20px;
+        }
+        main h1 {
+            margin-bottom: 20px;
+        }
+        main form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        main form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        main form input[type="text"],
+        main form input[type="file"],
+        main form input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: flex-start; /* 使按钮靠左对齐 */
+            align-items: center;
+            margin-top: 20px; /* 增加上边距以与其他元素分隔 */
+        }
+        .button-container input[type="submit"],
+        .button-container a.button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px; /* 设置按钮字体大小 */
+        }
+        .button-container input[type="submit"]:hover,
+        .button-container a.button:hover {
+            background-color: #0056b3;
+        }
+        main .message {
+            color: green;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+         .button + .button {
+            margin-left: 10px; /* 设置按钮之间的左边距 */
+        }
+    </style>
+    </style>
+</head>
+<body>
+    <header>
+        <h1>上传文档</h1>
+    </header>
+    <main>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="document">选择文档:</label>
+            <input type="file" name="document" id="document">
+            <br>
+
+            <label for="contract_category" style="display: flex; align-items: center;">文档分类:
+    <select name="contract_category" id="contract_category" style="margin-left: 10px;">
+        <option value="paper">纸质文档</option>
+        <option value="electronic">电子文档</option>
+    </select>
+        </label>
+         <br>
+
+            <!-- 新增字段的输入框 -->
+            <label for="contract_signature_date">文档签订日期:</label>
+            <input type="date" name="contract_signature_date" id="contract_signature_date">
+            <br>
+
+            <label for="contract_expiry_date">文档失效日期:</label>
+            <input type="date" name="contract_expiry_date" id="contract_expiry_date">
+            <br>
+
+            <label for="contract_amount_with_tax">文档备注:</label>
+            <input type="text" name="contract_amount_with_tax" id="contract_amount_with_tax">
+            <br>
+
+            <label for="contract_amount_without_tax">文档金额:元(未税）:</label>
+            <input type="text" name="contract_amount_without_tax" id="contract_amount_without_tax">
+            <br>
+
+
+
+            <select name="payment_terms" id="payment_terms">
+            <option value="" selected>选择对应系统</option>
+            {% for payment_term in existing_payment_terms %}
+            <option value="{{ payment_term.id }}">{{ payment_term.abbreviation }} - {{ payment_term.description }}</option>
+            {% endfor %}
+            </select>
+
+
+            <div class="button-container">
+                <input type="submit" value="上传" class="button">
+                <a href="{% url 'home' %}" class="button">返回</a>
+            </div>
+        </form>
+
+        {% if message %}
+            <div class="message">{{ message }}</div>
+        {% endif %}
+    </main>
+</body>
+</html>

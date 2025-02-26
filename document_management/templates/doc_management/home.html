@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>欢迎使用资源文档管理平台</title>
+    <style>
+        /* 设置页面的基本样式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        /* 设置页眉样式 */
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        /* 设置导航栏样式 */
+        nav {
+            float: left;
+            width: 200px;
+            background-color: #f1f1f1;
+            height: 84vh;
+            padding: 20px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        nav ul li {
+            margin-bottom: 10px;
+        }
+        nav ul li a {
+            color: #333;
+            text-decoration: none;
+            display: block;
+            padding: 5px;
+        }
+        nav ul li a:hover {
+            background-color: #ddd;
+        }
+        /* 设置子菜单样式 */
+        .submenu {
+            padding-left: 20px;
+            display: none;
+        }
+        .active .submenu {
+            display: block;
+        }
+        /* 设置主内容区样式 */
+        main {
+            margin-left: 220px;
+            padding: 20px;
+        }
+        main h1 {
+            margin-bottom: 20px;
+        }
+        main ul {
+            list-style: none;
+            padding: 0;
+        }
+        main ul li {
+            margin-bottom: 10px;
+        }
+        main a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        /* 设置表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        /* 设置用户信息和退出按钮样式 */
+        .user-info {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            color: #fff;
+        }
+        .user-info a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 10px;
+        }
+        .qq-group {
+            float: left;
+            margin-right: 10px;
+            padding: 20px 0;
+        }
+    </style>
+    <script>
+        function toggleSubMenu(event) {
+            const parentItem = event.target.parentElement;
+            parentItem.classList.toggle('active');
+        }
+
+        function confirmLogout() {
+            var confirmResult = confirm("确认退出系统吗？");
+            if (confirmResult) {
+                window.location.href = "{% url 'login' %}";
+            }
+        }
+
+        // 添加搜索功能
+        function searchDocuments() {
+            const searchTerm = document.getElementById('document-search').value.toLowerCase();
+            const documentRows = document.querySelectorAll('tr:not(:first-child)');
+
+            documentRows.forEach(row => {
+                const documentName = row.querySelector('td:first-child').textContent.toLowerCase();
+
+                if (documentName.includes(searchTerm)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // 添加文档类型筛选功能
+        function filterByContractType() {
+            const selectedType = document.getElementById('contract-type-filter').value;
+            const documentRows = document.querySelectorAll('tr:not(:first-child)');
+
+            documentRows.forEach(row => {
+                const contractType = row.querySelector('td:nth-child(2)').textContent;
+
+                if (selectedType === '' || contractType === selectedType) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>欢迎使用资源文档管理平台</h1>
+        <div class="user-info">
+            <p>欢迎您登陆：{{ user.full_name }}</p>
+            <a href="{% url 'admin:index' %}" style="margin-left: 10px;">进入管理台</a>
+            <a href="#" onclick="confirmLogout()">退出</a>
+        </div>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#" onclick="toggleSubMenu(event)">文档管理</a>
+                <ul class="submenu">
+                    <li><a href="{% url 'home' %}">文档列表</a></li>
+                    <li><a href="{% url 'upload_document' %}">上传文档</a></li>
+                    <li><a href="{% url 'batch_upload_document' %}">批量上传</a></li>
+                    <li><a href="{% url 'payment_terms_list' %}">对应系统</a></li>
+                </ul>
+            </li>
+            {% if request.user.is_superuser %}
+            <li><a href="#" onclick="toggleSubMenu(event)">用户管理</a>
+                <ul class="submenu">
+                    <li><a href="{% url 'user_list' %}">用户列表</a></li>
+                    <li><a href="{% url 'add_user' %}">新增用户</a></li>
+                    <li><a href="{% url 'department_settings' %}">新增部门</a></li>
+                    <li><a href="{% url 'department_list' %}">部门列表</a></li>
+                </ul>
+            </li>
+            {% endif %}
+            <li><a href="#" onclick="toggleSubMenu(event)">系统配置</a>
+                <ul class="submenu">
+                    <li><a href="{% url 'user_info' %}">用户信息</a></li>
+                    <li><a href="{% url 'change_password' %}">修改密码</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <h1 style="margin: 8px 0;">文档列表</h1>
+    <input type="text" id="document-search" placeholder="搜索文件" oninput="searchDocuments()" style="height: 30px; width: 200px; padding: 5px; border: 1px solid #D3D3D3; border-radius: 7px;">
+    <label for="contract-type-filter" style="margin-left: 20px;">文档类型：</label>
+    <select id="contract-type-filter" onchange="filterByContractType()">
+        <option value="">全部</option>
+        <option value="纸质文档">纸质文档</option>
+        <option value="电子文档">电子文档</option>
+    </select>
+    <main style="margin-top: -40px;">
+        <table>
+            <tr>
+                <th>文件名称</th>
+                <th>文档类型</th>
+                <th>上传人</th>
+                <th>上传时间</th>
+                <th>文档签订日期</th>
+                <th>文档失效日期</th>
+                <th>文档备注</th>
+                <th>文档备注</th>
+                <th>对应系统</th>
+                <th>操作</th>
+            </tr>
+            {% for document in page_documents %}
+            <tr>
+                <td>{{ document.document_name }}</td>
+                <td>{{ document.get_contract_category_display }}</td>
+                <td>{{ document.uploader }}</td>
+                <td>{{ document.uploaded_at|date:"Y-m-d H:i:s" }}</td>
+                <td>{{ document.contract_signature_date|date:"Y-m-d" }}</td>
+                <td>{{ document.contract_expiry_date|date:"Y-m-d" }}</td>
+                <td>{{ document.contract_amount_with_tax }}</td>
+                <td>{{ document.contract_amount_without_tax }}</td>
+                <td>{{ document.payment_terms }}</td>
+                <td>
+                    {% if request.user.is_superuser or document.uploader == request.user %}
+                    <a href="{% url 'preview_document' document.id %}" target="_blank">预览</a>
+                    <a href="{% url 'edit_document' document.id %}" class="edit-btn">编辑</a>
+                    <a href="{% url 'delete_document' document.id %}" onclick="return confirm('确认要删除该文档吗？')">删除</a>
+                    {% endif %}
+                    {% if not request.user.is_superuser %}
+                    {% if document.uploader != request.user %}
+                    {% if document.is_approved_for_preview %}
+                    <a href="{% url 'preview_document' document.id %}" target="_blank">预览</a>
+                    {% elif document.is_waiting_approval %}
+                    <a href="#" style="color: gray;">等待审批</a>
+                    {% else %}
+                    <a href="{% url 'request_preview' document.id %}" style="color: red;">预览申请</a>
+                    {% endif %}
+                    {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <div class="pagination">
+            {% if page_documents.has_previous %}
+            <a href="?page=1">&laquo; 第一页</a>
+            <a href="?page={{ page_documents.previous_page_number }}">上一页</a>
+            {% endif %}
+            <span class="current-page">{{ page_documents.number }} / {{ page_documents.paginator.num_pages }} 页</span>
+            {% if page_documents.has_next %}
+            <a href="?page={{ page_documents.next_page_number }}">下一页</a>
+            <a href="?page={{ page_documents.paginator.num_pages }}">最后一页 &raquo;</a>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

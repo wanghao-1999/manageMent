@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>确认删除对应系统</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #333;
+        }
+        p {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        button[type="submit"],
+        a.button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 16px;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+        }
+        button[type="submit"]:hover,
+        a.button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>确认删除对应系统</h1>
+    <p>确定要删除对应系统 {{ payment_term.abbreviation }} - {{ payment_term.description }} 吗？</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="button-container">
+            <button type="submit">确认删除</button>
+            <a href="{% url 'payment_terms_list' %}" class="button">取消</a>
+        </div>
+    </form>
+</body>
+</html>
